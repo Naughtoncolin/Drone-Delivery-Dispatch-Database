@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Tables Viewer</title>
+</head>
+<body>
+    <select id="table_name" name="table_name" onchange="fetchTableData()">
+        <option value="">Select a table</option>
+        {% for table in tables %}
+            <option value="{{ table }}">{{ table }}</option>
+        {% endfor %}
+    </select>
+
+    <div id="table_data"></div>
+
+    <script>
+        function fetchTableData() {
+    var tableName = document.getElementById('table_name').value;
+    if (tableName) {
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'table_name=' + encodeURIComponent(tableName)
+        })
+        .then(response => response.json())
+        .then(data => {
+            var table = '<table border="1"><thead><tr>';
+            data.columns.forEach(column => {
+                table += '<th>' + column + '</th>';
+            });
+            table += '</tr></thead><tbody>';
+            data.data.forEach(row => {
+                table += '<tr>';
+                data.columns.forEach(column => {  // Ensure the correct order by using columns to map values
+                    table += '<td>' + row[column] + '</td>';
+                });
+                table += '</tr>';
+            });
+            table += '</tbody></table>';
+            document.getElementById('table_data').innerHTML = table;
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        document.getElementById('table_data').innerHTML = '';
+    }
+}
+    </script>
+</body>
+</html>

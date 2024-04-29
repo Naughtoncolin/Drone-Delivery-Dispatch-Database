@@ -1,0 +1,110 @@
+<style>
+  table, tr, td {
+    border:1px solid black;
+  }
+  html {
+min-width: 550px;
+position: relative;
+}
+  </style>
+<div style="position: fixed; bottom: 10; width:100%; text-align: center">
+  <input  style="width:95%; height:20%" type="text" id="fname" name="fname">
+  <button type="submit" id="sendBttn">SEND</button></div>
+<div style="text-align: center;">Hello World - SQL Edition</div>
+<p style="position:fixed;
+padding:0;
+margin:0;
+
+top:30;
+left:10;
+overflow-y:scroll;
+overflow-x:scroll;
+width: 100%;
+height: 90%;
+background:rgba(255,255,255,0.5);
+" id="para"></p>
+
+
+<script>
+    document.addEventListener("click", printValue);
+    document.addEventListener("keydown", function (e) {console.log(e);
+    if (e.code === "Enter") { console.log(e);printValue(e);}});
+    const input = document.getElementById('fname')
+function printValue(evt) {
+  // only do stuff when the button was clicked
+  console.log(evt);
+  if (evt.target.id === "sendBttn" || evt.code === "Enter") {
+    const inputEl = document.querySelector("input#fname");
+    const value = inputEl.value.trim();
+    // value may be empty
+    if (value) {
+      // create an block element
+      x = document.querySelector("#para");
+      b = isElementScrolledToBottom(x);
+      //console.log(b)
+      const newLine = document.createElement("div");
+      // fill with the value
+      newLine.textContent = "Sent: " + value;
+      
+      // append it to the existing paragraph
+      document.querySelector("#para").appendChild(newLine);
+
+      const newLine2 = document.createElement("div");
+      // fill with the value
+     
+      fetch('/message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          message: value
+        })
+      }).then(res => res.json())
+    .then(data => {
+      //console.log(Array.isArray(data.message));
+      if (Array.isArray(data.message)) 
+      {newLine2.textContent = "Response: " + data.message; console.log("Arraay"); createTable(data.message);
+    }
+      else {newLine2.textContent = "Response: " + data.message; document.querySelector("#para").appendChild(newLine2);}
+      
+    }).then(data => {if (b) {x.scrollTop = x.scrollHeight;}})
+      // append it to the existing paragraph
+      
+      // reset input value
+      inputEl.value = "";
+      
+      // focus back to the input field
+      inputEl.focus();
+
+    }
+  }
+}
+function createTable(tableData) {
+  var table = document.createElement('table');
+  var tableBody = document.createElement('tbody');
+
+  tableData.forEach(function(rowData) {
+    var row = document.createElement('tr');
+
+    rowData.forEach(function(cellData) {
+      var cell = document.createElement('td');
+      cell.appendChild(document.createTextNode(cellData));
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+
+  table.appendChild(tableBody);
+  document.querySelector("#para").appendChild(table);
+}
+function isElementScrolledToBottom(el) {
+  if (el.scrollTop >= (el.scrollHeight - el.offsetHeight)) {
+      return true;
+  }
+  return false;
+}
+
+
+</script>
