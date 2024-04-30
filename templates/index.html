@@ -140,6 +140,34 @@
         }
     </script>
 
+    <h2>Remove Drone Pilot</h2>
+    <form id="remove_drone_pilot_form" onsubmit="removeDronePilot(); return false;">
+        <input type="text" name="uname" placeholder="Username" required>
+        <button type="submit">Remove Drone Pilot</button>
+    </form>
+
+    <script>
+        function removeDronePilot() {
+            var form = document.getElementById('remove_drone_pilot_form');
+            var formData = new FormData(form);
+            fetch('/remove_drone_pilot', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('Drone pilot removed successfully!');
+                } else {
+                    alert('Failed to remove drone pilot: ' + result.error);
+                }
+            })
+            .catch(error => {
+                alert('Failed to remove drone pilot: ' + error);
+            });
+        }
+    </script>
+
 <h2>Customer Credit Check</h2>
 <button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
 <div id="customer_credit_data"></div>

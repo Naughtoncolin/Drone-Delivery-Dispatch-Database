@@ -84,6 +84,20 @@ def remove_customer():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/remove_drone_pilot', methods=['POST'])
+def remove_drone_pilot():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL remove_drone_pilot(:uname)"),
+            {'uname': data['uname']}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")
