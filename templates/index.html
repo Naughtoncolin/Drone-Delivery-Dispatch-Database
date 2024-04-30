@@ -349,6 +349,73 @@
     }
 </script>
 
+<h2>Repair and Refuel Drone</h2>
+<form id="repair_drone_form" onsubmit="repairDrone(); return false;">
+    <input type="text" name="drone_store" placeholder="Drone Store" required>
+    <input type="number" name="drone_tag" placeholder="Drone Tag" required>
+    <input type="number" name="refueled_trips" placeholder="Refueled Trips" required>
+    <button type="submit">Repair and Refuel</button>
+</form>
+
+<script>
+    function repairDrone() {
+        var form = document.getElementById('repair_drone_form');
+        var formData = new FormData(form);
+        fetch('/repair_refuel_drone', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Drone repaired and refueled successfully!');
+                form.reset();
+            } else {
+                alert('Failed to repair and refuel drone: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to repair and refuel drone: ' + error);
+        });
+    }
+</script>
+
+<h2>Begin Order</h2>
+<form id="begin_order_form" onsubmit="beginOrder(); return false;">
+    <input type="text" name="orderID" placeholder="Order ID" required>
+    <input type="date" name="sold_on" placeholder="Sold On" required>
+    <input type="text" name="purchased_by" placeholder="Purchased By" required>
+    <input type="text" name="carrier_store" placeholder="Carrier Store" required>
+    <input type="number" name="carrier_tag" placeholder="Carrier Tag" required>
+    <input type="text" name="barcode" placeholder="Barcode" required>
+    <input type="number" name="price" placeholder="Price" required>
+    <input type="number" name="quantity" placeholder="Quantity" required>
+    <button type="submit">Begin Order</button>
+</form>
+
+<script>
+    function beginOrder() {
+        var form = document.getElementById('begin_order_form');
+        var formData = new FormData(form);
+        fetch('/begin_order', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Order initiated successfully!');
+                form.reset();
+            } else {
+                alert('Failed to initiate order: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to initiate order: ' + error);
+        });
+    }
+</script>
+
 <h2>Customer Credit Check</h2>
 <button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
 <div id="customer_credit_data"></div>

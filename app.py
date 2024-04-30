@@ -185,6 +185,34 @@ def swap_drone_control():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/repair_refuel_drone', methods=['POST'])
+def repair_refuel_drone():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL repair_refuel_drone(:drone_store, :drone_tag, :refueled_trips)"),
+            {'drone_store': data['drone_store'], 'drone_tag': int(data['drone_tag']), 'refueled_trips': int(data['refueled_trips'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/begin_order', methods=['POST'])
+def begin_order():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL begin_order(:orderID, :sold_on, :purchased_by, :carrier_store, :carrier_tag, :barcode, :price, :quantity)"),
+            {'orderID': data['orderID'], 'sold_on': data['sold_on'], 'purchased_by': data['purchased_by'], 'carrier_store': data['carrier_store'], 'carrier_tag': int(data['carrier_tag']), 'barcode': data['barcode'], 'price': int(data['price']), 'quantity': int(data['quantity'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")
