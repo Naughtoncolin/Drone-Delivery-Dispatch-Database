@@ -41,6 +41,34 @@
         <button type="submit">Add Drone Pilot</button>
     </form>
 
+    <h2>Remove Customer</h2>
+    <form id="remove_customer_form" onsubmit="removeCustomer(); return false;">
+        <input type="text" name="uname" placeholder="Username" required>
+        <button type="submit">Remove Customer</button>
+    </form>
+
+    <script>
+        function removeCustomer() {
+            var form = document.getElementById('remove_customer_form');
+            var formData = new FormData(form);
+            fetch('/remove_customer', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert('Customer removed successfully!');
+                } else {
+                    alert('Failed to remove customer: ' + result.error);
+                }
+            })
+            .catch(error => {
+                alert('Failed to remove customer: ' + error);
+            });
+        }
+    </script>
+
     <script>
         function fetchTableData() {
             var tableName = document.getElementById('table_name').value;
