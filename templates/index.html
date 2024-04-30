@@ -225,6 +225,70 @@
     }
 </script>
 
+<h2>Add Product</h2>
+<form id="add_product_form" onsubmit="addProduct(); return false;">
+    <input type="text" name="barcode" placeholder="Barcode" required>
+    <input type="text" name="pname" placeholder="Product Name" required>
+    <input type="number" name="weight" placeholder="Weight" required>
+    <button type="submit">Add Product</button>
+</form>
+
+<script>
+    function addProduct() {
+        var form = document.getElementById('add_product_form');
+        var formData = new FormData(form);
+        fetch('/add_product', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Product added successfully!');
+                form.reset();
+            } else {
+                alert('Failed to add product: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to add product: ' + error);
+        });
+    }
+</script>
+
+<h2>Add Drone</h2>
+<form id="add_drone_form" onsubmit="addDrone(); return false;">
+    <input type="text" name="storeID" placeholder="Store ID" required>
+    <input type="number" name="droneTag" placeholder="Drone Tag" required>
+    <input type="number" name="capacity" placeholder="Capacity" required>
+    <input type="number" name="remaining_trips" placeholder="Remaining Trips" required>
+    <input type="text" name="pilot" placeholder="Pilot" required>
+    <button type="submit">Add Drone</button>
+</form>
+
+<script>
+    function addDrone() {
+        var form = document.getElementById('add_drone_form');
+        var formData = new FormData(form);
+        fetch('/add_drone', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Drone added successfully!');
+                form.reset();
+            } else {
+                alert('Failed to add drone: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to add drone: ' + error);
+        });
+    }
+</script>
+
 <h2>Customer Credit Check</h2>
 <button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
 <div id="customer_credit_data"></div>

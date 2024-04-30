@@ -129,6 +129,34 @@ def remove_product():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/add_product', methods=['POST'])
+def add_product():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL add_product(:barcode, :pname, :weight)"),
+            {'barcode': data['barcode'], 'pname': data['pname'], 'weight': int(data['weight'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/add_drone', methods=['POST'])
+def add_drone():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL add_drone(:storeID, :droneTag, :capacity, :remaining_trips, :pilot)"),
+            {'storeID': data['storeID'], 'droneTag': int(data['droneTag']), 'capacity': int(data['capacity']), 'remaining_trips': int(data['remaining_trips']), 'pilot': data['pilot']}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")
