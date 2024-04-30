@@ -4,6 +4,7 @@
     <title>Database Interaction</title>
 </head>
 <body>
+    <h1>Select a Table to View</h1>
     <select id="table_name" name="table_name" onchange="fetchTableData()">
         <option value="">Select a table</option>
         {% for table in tables %}
@@ -13,6 +14,7 @@
 
     <div id="table_data"></div>
 
+    <h2>Add a New Customer</h2>
     <form id="add_customer_form" onsubmit="addCustomer(); return false;">
         <input type="text" name="uname" placeholder="Username" required>
         <input type="text" name="first_name" placeholder="First Name" required>
@@ -22,6 +24,21 @@
         <input type="number" name="rating" placeholder="Rating (1-5)" min="1" max="5" required>
         <input type="number" name="credit" placeholder="Credit" min="0" required>
         <button type="submit">Add Customer</button>
+    </form>
+
+    <h2>Add a New Drone Pilot</h2>
+    <form id="add_drone_pilot_form" onsubmit="addDronePilot(); return false;">
+        <input type="text" name="uname" placeholder="Username" required>
+        <input type="text" name="first_name" placeholder="First Name" required>
+        <input type="text" name="last_name" placeholder="Last Name" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="date" name="birthdate" required>
+        <input type="text" name="taxID" placeholder="Tax ID" required>
+        <input type="number" name="service" placeholder="Service" required>
+        <input type="number" name="salary" placeholder="Salary" required>
+        <input type="text" name="licenseID" placeholder="License ID" required>
+        <input type="number" name="experience" placeholder="Experience" required>
+        <button type="submit">Add Drone Pilot</button>
     </form>
 
     <script>
@@ -76,6 +93,59 @@
                 alert('Failed to add customer: ' + error);
             });
         }
+
+        function addDronePilot() {
+            var form = document.getElementById('add_drone_pilot_form');
+            var formData = new FormData(form);
+            fetch('/add_drone_pilot', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert('Drone pilot added successfully!');
+                form.reset();
+            })
+            .catch(error => {
+                alert('Failed to add drone pilot: ' + error);
+            });
+        }
     </script>
+
+<h2>Customer Credit Check</h2>
+<button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
+<div id="customer_credit_data"></div>
+
+<script>
+    function fetchCustomerCreditCheck() {
+        fetch('/customer_credit_check', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateCustomerCreditData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateCustomerCreditData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('customer_credit_data').innerHTML = table;
+    }
+</script>
+
 </body>
 </html>

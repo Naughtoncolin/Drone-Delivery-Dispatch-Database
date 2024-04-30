@@ -43,5 +43,41 @@ def add_customer():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/add_drone_pilot', methods=['POST'])
+def add_drone_pilot():
+    data = request.form
+    try:
+        db.session.execute(
+            text("""
+                CALL add_drone_pilot(:uname, :first_name, :last_name, :address, :birthdate, :taxID, :service, :salary, :licenseID, :experience)
+            """),
+            {
+                'uname': data['uname'],
+                'first_name': data['first_name'],
+                'last_name': data['last_name'],
+                'address': data['address'],
+                'birthdate': data['birthdate'],
+                'taxID': data['taxID'],
+                'service': int(data['service']),
+                'salary': int(data['salary']),
+                'licenseID': data['licenseID'],
+                'experience': int(data['experience'])
+            }
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/customer_credit_check', methods=['GET'])
+def customer_credit_check():
+    query = text("SELECT * FROM customer_credit_check")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
