@@ -157,6 +157,34 @@ def add_drone():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/increase_customer_credits', methods=['POST'])
+def increase_customer_credits():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL increase_customer_credits(:uname, :money)"),
+            {'uname': data['uname'], 'money': int(data['money'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/swap_drone_control', methods=['POST'])
+def swap_drone_control():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL swap_drone_control(:incoming_pilot, :outgoing_pilot)"),
+            {'incoming_pilot': data['incoming_pilot'], 'outgoing_pilot': data['outgoing_pilot']}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")

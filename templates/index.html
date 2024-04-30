@@ -289,6 +289,66 @@
     }
 </script>
 
+<h2>Increase Customer Credits</h2>
+<form id="increase_credits_form" onsubmit="increaseCredits(); return false;">
+    <input type="text" name="uname" placeholder="Username" required>
+    <input type="number" name="money" placeholder="Amount" required>
+    <button type="submit">Increase Credits</button>
+</form>
+
+<script>
+    function increaseCredits() {
+        var form = document.getElementById('increase_credits_form');
+        var formData = new FormData(form);
+        fetch('/increase_customer_credits', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Customer credits increased successfully!');
+                form.reset();
+            } else {
+                alert('Failed to increase customer credits: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to increase customer credits: ' + error);
+        });
+    }
+</script>
+
+<h2>Swap Drone Control</h2>
+<form id="swap_drone_control_form" onsubmit="swapDroneControl(); return false;">
+    <input type="text" name="incoming_pilot" placeholder="Incoming Pilot" required>
+    <input type="text" name="outgoing_pilot" placeholder="Outgoing Pilot" required>
+    <button type="submit">Swap Drone Control</button>
+</form>
+
+<script>
+    function swapDroneControl() {
+        var form = document.getElementById('swap_drone_control_form');
+        var formData = new FormData(form);
+        fetch('/swap_drone_control', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Drone control swapped successfully!');
+                form.reset();
+            } else {
+                alert('Failed to swap drone control: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to swap drone control: ' + error);
+        });
+    }
+</script>
+
 <h2>Customer Credit Check</h2>
 <button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
 <div id="customer_credit_data"></div>
