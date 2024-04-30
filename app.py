@@ -78,6 +78,45 @@ def customer_credit_check():
     data = [dict(zip(columns, row)) for row in result.fetchall()]
     return jsonify({'data': data, 'columns': columns})
 
+@app.route('/drone_traffic_control', methods=['GET'])
+def drone_traffic_control():
+    query = text("SELECT * FROM drone_traffic_control")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+@app.route('/most_popular_products', methods=['GET'])
+def most_popular_products():
+    query = text("SELECT * FROM most_popular_products")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+@app.route('/drone_pilot_roster', methods=['GET'])
+def drone_pilot_roster():
+    query = text("SELECT * FROM drone_pilot_roster")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+@app.route('/store_sales_overview', methods=['GET'])
+def store_sales_overview():
+    query = text("SELECT * FROM store_sales_overview")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+@app.route('/orders_in_progress', methods=['GET'])
+def orders_in_progress():
+    query = text("SELECT * FROM orders_in_progress")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -147,5 +147,180 @@
     }
 </script>
 
+<h2>Drone Traffic Control</h2>
+<button onclick="fetchDroneTrafficControl()">Check Drone Status</button>
+<div id="drone_traffic_data"></div>
+
+<script>
+    function fetchDroneTrafficControl() {
+        fetch('/drone_traffic_control', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateDroneTrafficData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateDroneTrafficData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('drone_traffic_data').innerHTML = table;
+    }
+</script>
+
+<h2>Most Popular Products</h2>
+<button onclick="fetchMostPopularProducts()">Check Popular Products</button>
+<div id="popular_products_data"></div>
+
+<script>
+    function fetchMostPopularProducts() {
+        fetch('/most_popular_products', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updatePopularProductsData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updatePopularProductsData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('popular_products_data').innerHTML = table;
+    }
+</script>
+
+<h2>Drone Pilot Roster</h2>
+<button onclick="fetchDronePilotRoster()">Check Pilot Roster</button>
+<div id="pilot_roster_data"></div>
+
+<script>
+    function fetchDronePilotRoster() {
+        fetch('/drone_pilot_roster', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updatePilotRosterData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updatePilotRosterData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('pilot_roster_data').innerHTML = table;
+    }
+</script>
+
+<h2>Store Sales Overview</h2>
+<button onclick="fetchStoreSalesOverview()">Check Store Sales</button>
+<div id="store_sales_data"></div>
+
+<script>
+    function fetchStoreSalesOverview() {
+        fetch('/store_sales_overview', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateStoreSalesData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateStoreSalesData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('store_sales_data').innerHTML = table;
+    }
+</script>
+
+<h2>Orders in Progress</h2>
+<button onclick="fetchOrdersInProgress()">Check Orders in Progress</button>
+<div id="orders_in_progress_data"></div>
+
+<script>
+    function fetchOrdersInProgress() {
+        fetch('/orders_in_progress', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => updateOrdersInProgressData(data))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateOrdersInProgressData(data) {
+        var table = '<table border="1"><thead><tr>';
+        data.columns.forEach(column => {
+            table += '<th>' + column + '</th>';
+        });
+        table += '</tr></thead><tbody>';
+        data.data.forEach(row => {
+            table += '<tr>';
+            data.columns.forEach(column => {
+                table += '<td>' + row[column] + '</td>';
+            });
+            table += '</tr>';
+        });
+        table += '</tbody></table>';
+        document.getElementById('orders_in_progress_data').innerHTML = table;
+    }
+</script>
+
 </body>
 </html>
