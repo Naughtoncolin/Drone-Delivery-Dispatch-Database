@@ -416,6 +416,96 @@
     }
 </script>
 
+<h2>Add Order Line</h2>
+<form id="add_order_line_form" onsubmit="addOrderLine(); return false;">
+    <input type="text" name="orderID" placeholder="Order ID" required>
+    <input type="text" name="barcode" placeholder="Barcode" required>
+    <input type="number" name="price" placeholder="Price" required>
+    <input type="number" name="quantity" placeholder="Quantity" required>
+    <button type="submit">Add Order Line</button>
+</form>
+
+<script>
+    function addOrderLine() {
+        var form = document.getElementById('add_order_line_form');
+        var formData = new FormData(form);
+        fetch('/add_order_line', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Order line added successfully!');
+                form.reset();
+            } else {
+                alert('Failed to add order line: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to add order line: ' + error);
+        });
+    }
+</script>
+
+<h2>Deliver Order</h2>
+<form id="deliver_order_form" onsubmit="deliverOrder(); return false;">
+    <input type="text" name="orderID" placeholder="Order ID" required>
+    <button type="submit">Deliver Order</button>
+</form>
+
+<script>
+    function deliverOrder() {
+        var form = document.getElementById('deliver_order_form');
+        var formData = new FormData(form);
+        fetch('/deliver_order', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Order delivered successfully!');
+                form.reset();
+            } else {
+                alert('Failed to deliver order: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to deliver order: ' + error);
+        });
+    }
+</script>
+
+<h2>Cancel Order</h2>
+<form id="cancel_order_form" onsubmit="cancelOrder(); return false;">
+    <input type="text" name="orderID" placeholder="Order ID" required>
+    <button type="submit">Cancel Order</button>
+</form>
+
+<script>
+    function cancelOrder() {
+        var form = document.getElementById('cancel_order_form');
+        var formData = new FormData(form);
+        fetch('/cancel_order', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Order canceled successfully!');
+                form.reset();
+            } else {
+                alert('Failed to cancel order: ' + result.error);
+            }
+        })
+        .catch(error => {
+            alert('Failed to cancel order: ' + error);
+        });
+    }
+</script>
+
 <h2>Customer Credit Check</h2>
 <button onclick="fetchCustomerCreditCheck()">Check Customer Credit</button>
 <div id="customer_credit_data"></div>

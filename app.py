@@ -213,6 +213,48 @@ def begin_order():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/add_order_line', methods=['POST'])
+def add_order_line():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL add_order_line(:orderID, :barcode, :price, :quantity)"),
+            {'orderID': data['orderID'], 'barcode': data['barcode'], 'price': int(data['price']), 'quantity': int(data['quantity'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/deliver_order', methods=['POST'])
+def deliver_order():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL deliver_order(:orderID)"),
+            {'orderID': data['orderID']}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/cancel_order', methods=['POST'])
+def cancel_order():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL cancel_order(:orderID)"),
+            {'orderID': data['orderID']}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")
