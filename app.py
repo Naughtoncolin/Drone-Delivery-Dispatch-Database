@@ -98,6 +98,37 @@ def remove_drone_pilot():
         db.session.rollback()
         return jsonify({'error': str(e)})
 
+@app.route('/remove_drone', methods=['POST'])
+def remove_drone():
+    data = request.form
+    try:
+        db.session.execute(
+            text("CALL remove_drone(:storeID, :droneTag)"),
+            {'storeID': data['storeID'], 'droneTag': int(data['droneTag'])}
+        )
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
+@app.route('/remove_product', methods=['POST'])
+def remove_product():
+    data = request.form
+    try:
+        result = db.session.execute(
+            text("CALL remove_product(:barcode)"),
+            {'barcode': data['barcode']}
+        )
+        for row in result:
+            if 'Error' in row:
+                return jsonify({'error': row[0]})
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)})
+
 @app.route('/customer_credit_check', methods=['GET'])
 def customer_credit_check():
     query = text("SELECT * FROM customer_credit_check")
@@ -141,6 +172,14 @@ def store_sales_overview():
 @app.route('/orders_in_progress', methods=['GET'])
 def orders_in_progress():
     query = text("SELECT * FROM orders_in_progress")
+    result = db.session.execute(query)
+    columns = list(result.keys())
+    data = [dict(zip(columns, row)) for row in result.fetchall()]
+    return jsonify({'data': data, 'columns': columns})
+
+@app.route('/role_distribution', methods=['GET'])
+def role_distribution():
+    query = text("SELECT * FROM role_distribution")
     result = db.session.execute(query)
     columns = list(result.keys())
     data = [dict(zip(columns, row)) for row in result.fetchall()]
