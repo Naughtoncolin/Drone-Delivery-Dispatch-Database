@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Database Tables Viewer</title>
+    <title>Database Interaction</title>
 </head>
 <body>
     <select id="table_name" name="table_name" onchange="fetchTableData()">
@@ -13,19 +13,37 @@
 
     <div id="table_data"></div>
 
+    <form id="add_customer_form" onsubmit="addCustomer(); return false;">
+        <input type="text" name="uname" placeholder="Username" required>
+        <input type="text" name="first_name" placeholder="First Name" required>
+        <input type="text" name="last_name" placeholder="Last Name" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="date" name="birthdate" placeholder="Birthdate" required>
+        <input type="number" name="rating" placeholder="Rating (1-5)" min="1" max="5" required>
+        <input type="number" name="credit" placeholder="Credit" min="0" required>
+        <button type="submit">Add Customer</button>
+    </form>
+
     <script>
         function fetchTableData() {
-    var tableName = document.getElementById('table_name').value;
-    if (tableName) {
-        fetch('/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'table_name=' + encodeURIComponent(tableName)
-        })
-        .then(response => response.json())
-        .then(data => {
+            var tableName = document.getElementById('table_name').value;
+            if (tableName) {
+                fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'table_name=' + encodeURIComponent(tableName)
+                })
+                .then(response => response.json())
+                .then(data => updateTable(data))
+                .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('table_data').innerHTML = '';
+            }
+        }
+
+        function updateTable(data) {
             var table = '<table border="1"><thead><tr>';
             data.columns.forEach(column => {
                 table += '<th>' + column + '</th>';
@@ -33,19 +51,31 @@
             table += '</tr></thead><tbody>';
             data.data.forEach(row => {
                 table += '<tr>';
-                data.columns.forEach(column => {  // Ensure the correct order by using columns to map values
+                data.columns.forEach(column => {
                     table += '<td>' + row[column] + '</td>';
                 });
                 table += '</tr>';
             });
             table += '</tbody></table>';
             document.getElementById('table_data').innerHTML = table;
-        })
-        .catch(error => console.error('Error:', error));
-    } else {
-        document.getElementById('table_data').innerHTML = '';
-    }
-}
+        }
+
+        function addCustomer() {
+            var form = document.getElementById('add_customer_form');
+            var formData = new FormData(form);
+            fetch('/add_customer', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert('Customer added successfully!');
+                form.reset();
+            })
+            .catch(error => {
+                alert('Failed to add customer: ' + error);
+            });
+        }
     </script>
 </body>
 </html>
